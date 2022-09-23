@@ -188,8 +188,7 @@ namespace Avalonia.Skia
                     return new FramebufferRenderTarget(framebufferSurface);
             }
 
-            throw new NotSupportedException(
-                "Don't know how to create a Skia render target from any of provided surfaces");
+            throw new NotSupportedException("Don't know how to create a Skia render target from any of provided surfaces");
         }
 
         /// <inheritdoc />
@@ -201,9 +200,9 @@ namespace Avalonia.Skia
         private static readonly SKFont s_font = new SKFont
         {
             Subpixel = true,
-            Edging = SKFontEdging.SubpixelAntialias,
-            Hinting = SKFontHinting.Full,
-            LinearMetrics = true
+            Edging = SKFontEdging.Antialias,
+            Hinting = SKFontHinting.Normal,
+			LinearMetrics = true,
         };
 
         private static readonly ThreadLocal<SKTextBlobBuilder> s_textBlobBuilderThreadLocal = new ThreadLocal<SKTextBlobBuilder>(() => new SKTextBlobBuilder());
@@ -303,11 +302,17 @@ namespace Avalonia.Skia
         public IOpenGlBitmapImpl CreateOpenGlBitmap(PixelSize size, Vector dpi)
         {
             if (_skiaGpu is IOpenGlAwareSkiaGpu glAware)
-                return glAware.CreateOpenGlBitmap(size, dpi);
-            if (_skiaGpu == null)
-                throw new PlatformNotSupportedException("GPU acceleration is not available");
-            throw new PlatformNotSupportedException(
-                "Current GPU acceleration backend does not support OpenGL integration");
+			{
+				return glAware.CreateOpenGlBitmap(size, dpi);
+			}
+			else if (_skiaGpu == null)
+			{
+				throw new PlatformNotSupportedException("GPU acceleration is not available");
+			}
+			else
+			{
+				throw new PlatformNotSupportedException("Current GPU acceleration backend does not support OpenGL integration");
+			}
         }
 
         public bool SupportsIndividualRoundRects => true;
