@@ -11,7 +11,7 @@
   </ItemGroup>
   <ItemGroup>
 	<PackageReference Include="Avalonia" Version="0.10.17" />
-	<PackageReference Include="SkiaSharp" Version="2.88.1-preview.1" />
+	<PackageReference Include="SkiaSharp" Version="2.80.4" />
 	<PackageReference Include="HarfBuzzSharp" Version="2.8.2-preview.178" />
   </ItemGroup>
 </Project>

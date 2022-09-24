@@ -200,7 +200,7 @@ namespace Avalonia.Skia
         private static readonly SKFont s_font = new SKFont
         {
             Subpixel = true,
-            Edging = SKFontEdging.Antialias,
+            Edging = SKFontEdging.SubpixelAntialias,
             Hinting = SKFontHinting.Normal,
 			LinearMetrics = true,
         };
@@ -221,7 +221,6 @@ namespace Avalonia.Skia
             s_font.Typeface = typeface;
             s_font.Embolden = glyphTypeface.IsFakeBold;
             s_font.SkewX = glyphTypeface.IsFakeItalic ? -0.2f : 0;
-
 
             SKTextBlob textBlob;
 
