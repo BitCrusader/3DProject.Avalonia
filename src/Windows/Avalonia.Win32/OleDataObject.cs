@@ -68,15 +68,6 @@ namespace Avalonia.Win32
 
                         byte[] data = ReadBytesFromHGlobal(medium.unionmember);
 
-                        if (IsSerializedObject(data))
-                        {
-                            using (var ms = new MemoryStream(data))
-                            {
-                                ms.Position = DataObject.SerializedObjectGUID.Length;
-                                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                                return binaryFormatter.Deserialize(ms);
-                            }
-                        }
                         return data;
                     }
                 }

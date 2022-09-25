@@ -279,13 +279,7 @@ namespace Avalonia.Win32
 
         private byte[] SerializeObject(object data)
         {
-            using (var ms = new MemoryStream())
-            {
-                ms.Write(SerializedObjectGUID, 0, SerializedObjectGUID.Length);
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(ms, data);
-                return ms.ToArray();
-            }
+			return new byte[0];
         }
 
         private unsafe int WriteBytesToHGlobal(ref IntPtr hGlobal, ReadOnlySpan<byte> data)
