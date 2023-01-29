@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -103,7 +105,7 @@ namespace Avalonia.Win32
 {
     public class Win32Platform : IPlatformThreadingInterface, IPlatformSettings, IWindowingPlatform, IPlatformIconLoader, IPlatformLifetimeEventsImpl
     {
-        private static readonly Win32Platform s_instance = new Win32Platform();
+        internal static readonly Win32Platform s_instance = new Win32Platform();
         private static Thread _uiThread;
         private UnmanagedMethods.WndProc _wndProcDelegate;
         private IntPtr _hwnd;
@@ -209,24 +211,28 @@ namespace Avalonia.Win32
             }
         }
 
+		private List<(double, Stopwatch, Action)> timers = new();
+		internal void TimerTick()
+		{
+			for (int i = timers.Count - 1; i >= 0; i--)
+			{
+				var timer = timers[i];
+
+				if (timer.Item2.Elapsed.TotalSeconds > timer.Item1 || timer.Item1 == 0d)
+				{
+					timer.Item3.Invoke();
+					timer.Item2.Restart();
+				}
+			}
+		}
+
         public IDisposable StartTimer(DispatcherPriority priority, TimeSpan interval, Action callback)
         {
-            UnmanagedMethods.TimerProc timerDelegate =
-                (hWnd, uMsg, nIDEvent, dwTime) => callback();
-
-            IntPtr handle = UnmanagedMethods.SetTimer(
-                IntPtr.Zero,
-                IntPtr.Zero,
-                (uint)interval.TotalMilliseconds,
-                timerDelegate);
-
-            // Prevent timerDelegate being garbage collected.
-            _delegates.Add(timerDelegate);
+            timers.Add(new(interval.TotalSeconds, Stopwatch.StartNew(), callback));
 
             return Disposable.Create(() =>
             {
-                _delegates.Remove(timerDelegate);
-                UnmanagedMethods.KillTimer(IntPtr.Zero, handle);
+	            timers.Remove(timers.First(o => o.Item3 == callback && o.Item1 == interval.TotalSeconds));
             });
         }
 
