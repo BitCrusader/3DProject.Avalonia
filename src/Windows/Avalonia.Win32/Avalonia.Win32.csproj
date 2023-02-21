@@ -9,7 +9,7 @@
     <Compile Include="..\..\Avalonia.Base\Metadata\NullableAttributes.cs" Link="NullableAttributes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\packages\Avalonia\Avalonia.csproj" />
+    <PackageReference Include="Avalonia" Version="11.0.0-preview4" />
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.0.2020091801" />
     <PackageReference Include="MicroCom.CodeGenerator.MSBuild" Version="0.11.0" PrivateAssets="all" />
     <MicroComIdl Include="WinRT\winrt.idl" CSharpInteropPath="WinRT\WinRT.Generated.cs" />
@@ -24,6 +24,7 @@
     <Compile Remove="..\..\Shared\SourceGeneratorAttributes.cs" />
   </ItemGroup>
   <Import Project="..\..\..\build\TrimmingEnable.props" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\..\..\build\System.Drawing.Common.props" />
   <PropertyGroup Label="Warnings">
     <NoWarn>$(NoWarn);CA1416</NoWarn>
   </PropertyGroup>
