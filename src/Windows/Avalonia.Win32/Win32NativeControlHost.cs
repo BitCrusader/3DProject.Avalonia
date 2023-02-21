@@ -103,10 +103,14 @@ namespace Avalonia.Win32
                         UnmanagedMethods.LayeredWindowFlags.LWA_ALPHA);
             }
 
-
-
             protected virtual unsafe IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
             {
+				switch ((UnmanagedMethods.WindowsMessage)msg)
+				{
+					case UnmanagedMethods.WindowsMessage.WM_NCHITTEST:
+						return (IntPtr)UnmanagedMethods.HitTestValues.HTTRANSPARENT;
+				}
+
                 return UnmanagedMethods.DefWindowProc(hWnd, msg, wParam, lParam);
             }
 
