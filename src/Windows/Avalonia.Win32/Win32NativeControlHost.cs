@@ -105,6 +105,11 @@ namespace Avalonia.Win32
 
             private static IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
             {
+				if (msg == (uint)UnmanagedMethods.WindowsMessage.WM_NCHITTEST)
+				{
+					return (IntPtr)UnmanagedMethods.HitTestValues.HTTRANSPARENT;
+				}
+				
                 return UnmanagedMethods.DefWindowProc(hWnd, msg, wParam, lParam);
             }
 
