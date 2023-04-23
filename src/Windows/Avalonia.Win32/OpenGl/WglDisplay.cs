@@ -24,6 +24,10 @@ namespace Avalonia.Win32.OpenGl
             int nMaxFormats, int[] piFormats, out int nNumFormats);
 
         private static WglChoosePixelFormatARBDelegate? s_wglChoosePixelFormatArb;
+		
+		internal delegate bool WglSwapIntervalEXTDelegate(int interval);
+
+		internal static WglSwapIntervalEXTDelegate WglSwapIntervalEXT;
 
         private delegate IntPtr WglCreateContextAttribsARBDelegate(IntPtr hDC, IntPtr hShareContext, int[]? attribList);
 
@@ -98,6 +102,8 @@ namespace Avalonia.Win32.OpenGl
                 DescribePixelFormat(_bootstrapDc, formats[0], Marshal.SizeOf<PixelFormatDescriptor>(), ref _defaultPfd);
                 _defaultPixelFormat = formats[0];
             }
+			
+			WglSwapIntervalEXT = Marshal.GetDelegateForFunctionPointer<WglSwapIntervalEXTDelegate>(wglGetProcAddress("wglSwapIntervalEXT"));
             
             wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
             return true;

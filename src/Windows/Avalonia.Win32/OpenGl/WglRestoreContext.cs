@@ -29,6 +29,9 @@ namespace Avalonia.Win32.OpenGl
                     Monitor.Exit(monitor);
                 throw new OpenGlException($"Unable to make the context current: {lastError}, DC valid: {caps != 0}");
             }
+			
+			// Make sure the UI isn't performing it's own vsync
+			WglDisplay.WglSwapIntervalEXT(0);
         }
 
         public void Dispose()
