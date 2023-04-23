@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using Avalonia.Reactive;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -109,7 +111,7 @@ namespace Avalonia.Win32
 {
     internal class Win32Platform : IPlatformThreadingInterface, IWindowingPlatform, IPlatformIconLoader, IPlatformLifetimeEventsImpl
     {
-        private static readonly Win32Platform s_instance = new();
+        internal static readonly Win32Platform s_instance = new();
         private static Thread? s_uiThread;
         private static Win32PlatformOptions? s_options;
         private static Compositor? s_compositor;
@@ -220,24 +222,29 @@ namespace Avalonia.Win32
                     ?.Log(this, "Unmanaged error in {0}. Error Code: {1}", nameof(RunLoop), Marshal.GetLastWin32Error());
             }
         }
+		
+		List<(double, Stopwatch, Action)> timers = new();
+		internal void TimerTick()
+		{
+			for (int i = timers.Count - 1; i >= 0; i--)
+			{
+				var timer = timers[i];
+
+				if (timer.Item2.Elapsed.TotalSeconds > timer.Item1 || timer.Item1 == 0d)
+				{
+					timer.Item3.Invoke();
+					timer.Item2.Restart();
+				}
+			}
+		}
 
         public IDisposable StartTimer(DispatcherPriority priority, TimeSpan interval, Action callback)
         {
-            TimerProc timerDelegate = (_, _, _, _) => callback();
-
-            IntPtr handle = SetTimer(
-                IntPtr.Zero,
-                IntPtr.Zero,
-                (uint)interval.TotalMilliseconds,
-                timerDelegate);
-
-            // Prevent timerDelegate being garbage collected.
-            _delegates.Add(timerDelegate);
+            timers.Add(new(interval.TotalSeconds, Stopwatch.StartNew(), callback));
 
             return Disposable.Create(() =>
             {
-                _delegates.Remove(timerDelegate);
-                KillTimer(IntPtr.Zero, handle);
+				timers.Remove(timers.First(o => o.Item3 == callback && o.Item1 == interval.TotalSeconds));
             });
         }
 
