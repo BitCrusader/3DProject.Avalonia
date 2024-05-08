@@ -915,7 +915,9 @@ namespace Avalonia.Win32
                 lpfnWndProc = _wndProcDelegate,
                 hInstance = GetModuleHandle(null),
                 hCursor = s_defaultCursor,
-                hbrBackground = IntPtr.Zero,
+                hbrBackground = GetStockObject(4),
+                //hbrBackground = CreateSolidBrush(0x1a1a1a),
+                //hbrBackground = IntPtr.Zero,
                 lpszClassName = _className
             };
 
