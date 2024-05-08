@@ -130,6 +130,12 @@ namespace Avalonia.Win32.DirectX
 
         DXGI_SWAP_CHAIN_FLAG_RESTRICTED_TO_ALL_HOLOGRAPHIC_DISPLAYS = 4096,
     }
+	
+    [Flags]
+    internal enum DXGI_PRESENT
+    {
+        DXGI_PRESENT_ALLOW_TEARING = 512,
+    }
     
     internal enum DXGI_SCALING
     {

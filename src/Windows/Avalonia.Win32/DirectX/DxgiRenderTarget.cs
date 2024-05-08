@@ -123,7 +123,7 @@ namespace Avalonia.Win32.DirectX
 
                 var res = base.BeginDraw(surface, _window.Size, _window.Scaling, () =>
                 {
-                    _swapChain.Present((ushort)0U, (ushort)0U);
+                    _swapChain.Present((ushort)0U, (ushort)DXGI_PRESENT.DXGI_PRESENT_ALLOW_TEARING);
                     surface.Dispose();
                     transaction?.Dispose();
                     contextLock?.Dispose();
