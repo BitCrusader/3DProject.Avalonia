@@ -1625,9 +1625,6 @@ namespace Avalonia.Win32.Interop
         [DllImport("gdi32.dll")]
         public static extern IntPtr GetStockObject(uint i);
 
-        [DllImport("gdi32.dll")]
-        public static extern IntPtr CreateSolidBrush(uint color);
-
         [DllImport("shcore.dll")]
         public static extern void GetScaleFactorForMonitor(IntPtr hMon, out uint pScale);
 
