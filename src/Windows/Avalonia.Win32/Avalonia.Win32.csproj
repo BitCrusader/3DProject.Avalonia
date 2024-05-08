@@ -4,12 +4,15 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!-- We still keep BinaryFormatter for WinForms compatibility. -->
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <AvaloniaAccessUnstablePrivateApis>true</AvaloniaAccessUnstablePrivateApis>
+    <Avalonia_I_Want_To_Use_Private_Apis_In_Nuget_Package_And_Promise_To_Pin_The_Exact_Avalonia_Version_In_Package_Dependency>true</Avalonia_I_Want_To_Use_Private_Apis_In_Nuget_Package_And_Promise_To_Pin_The_Exact_Avalonia_Version_In_Package_Dependency>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\packages\Avalonia\Avalonia.csproj" />
+    <PackageReference Include="Avalonia" Version="11.1.0-beta2" />
+    <!--<ProjectReference Include="..\..\..\packages\Avalonia\Avalonia.csproj" />-->
     <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.22045.20230930" />
     <PackageReference Include="MicroCom.CodeGenerator.MSBuild" Version="0.11.0" PrivateAssets="all" />
     <MicroComIdl Include="WinRT\winrt.idl" CSharpInteropPath="WinRT\WinRT.Generated.cs" />
@@ -17,8 +20,8 @@
     <MicroComIdl Include="DirectX\directx.idl" CSharpInteropPath="DirectX\directx.Generated.cs" />
     <MicroComIdl Include="DComposition\dcomp.idl" CSharpInteropPath="DComposition\DComp.Generated.cs" />
   </ItemGroup>
-  <Import Project="..\..\..\build\NullableEnable.props" />
-  <Import Project="..\..\..\build\DevAnalyzers.props" />
+  <!--<Import Project="..\..\..\build\NullableEnable.props" />
+  <Import Project="..\..\..\build\DevAnalyzers.props" />-->
   <Import Project="..\..\..\build\SourceGenerators.props" />
   <ItemGroup>
     <Compile Remove="..\..\Shared\SourceGeneratorAttributes.cs" />
